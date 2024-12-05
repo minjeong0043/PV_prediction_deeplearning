@@ -86,4 +86,4 @@ T = table(intervals_column, mse_column, psnr_column, ssim_column, ...
           'VariableNames', {'Interval', 'MSE', 'PSNR', 'SSIM'});
 writetable(T, 'image_quality_metrics.xlsx');
 
-fprintf('MSE, PSNR 및 SSIM 결과가 Excel 파일로 저장되었습니다.\n');
+fprintf('MSE, PSNR 및 SSIM 결과가 Excel 파일 저장완료^^\n');
