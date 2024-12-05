@@ -12,7 +12,7 @@ end
 
 time_intervals = [10 20 30 40 50 60 70 80 90 100 110];
 mse_results = cell(1, length(time_intervals));
-psnr_resuls = cell(1, length(time_intervals));
+psnr_results = cell(1, length(time_intervals));
 ssim_results = cell(1, length(time_intervals));
 for k = 1:length(time_intervals)
     interval = time_intervals(k);
