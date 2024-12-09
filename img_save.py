@@ -4,6 +4,14 @@ from selenium.webdriver.common.by import By
 from test1206_function import saveData
 driver = webdriver.Chrome()
 
+
+def saveData(driver):
+    save_button = driver.find_element(By.XPATH, '//*[@id="content"]/section/div[2]/div/div[2]/button[5]/i').click()
+    original_img_button = driver.find_element(By.XPATH, '//*[@id="download-confirm"]/ul/li[1]/button/em').click()
+    savePage_close_button = driver.find_element(By.XPATH, '/html/body/div[5]/div[3]/div/button').click()
+
+
+
 time.sleep(5)
 url = 'https://nmsc.kma.go.kr/homepage/html/satellite/viewer/selectNewSatViewer.do?dataType=operSat'
 driver.get(url)
