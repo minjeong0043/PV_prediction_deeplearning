@@ -1,9 +1,7 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from test1206_function import saveData
 driver = webdriver.Chrome()
-
 
 def saveData(driver):
     save_button = driver.find_element(By.XPATH, '//*[@id="content"]/section/div[2]/div/div[2]/button[5]/i').click()
