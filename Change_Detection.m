@@ -69,3 +69,64 @@ for k = 1:length(min_intervals)
     ssim_results{k} = ssim_vals;
     of_results{k} = of_vals;
 end
+
+
+% 결과 출력
+for j = 1:length(time_intervals)
+    interval = min_intervals(j);
+    
+    mse_values = mse_results{j};
+    mse_mean = mean(mse_values);
+    mse_std = std(mse_values);
+    
+    psnr_values = psnr_results{j};
+    psnr_mean = mean(psnr_values);
+    psnr_std = std(psnr_values);
+    
+    ssim_values = ssim_results{j};
+    ssim_mean = mean(ssim_values);
+    ssim_std = std(ssim_values);
+
+    of_values = of_results{j};
+    of_mean = mean(of_values);
+    of_std = std(of_values);
+
+    fprintf('%d분 단위 비교:\n', interval);
+    fprintf('MSE 평균: %.2f\n', mse_mean);
+    fprintf('MSE 표준편차: %.2f\n', mse_std);
+    
+    fprintf('PSNR 평균: %.2f\n', psnr_mean);
+    fprintf('PSNR 표준편차: %.2f\n', psnr_std);
+
+    fprintf('SSIM 평균: %.4f\n', ssim_mean); % SSIM은 일반적으로 소수점 네 자리로 표시
+    fprintf('SSIM 표준편차: %.4f\n\n', ssim_std);
+
+    fprintf('OF 평균: %.4f\n', of_mean); 
+    fprintf('OF 표준편차: %.4f\n\n', of_std);
+end
+
+
+% Excel
+intervals_column = [];
+mse_column = [];
+psnr_column = [];
+ssim_column = [];
+of_column = [];
+for j = 1:length(min_intervals)
+    interval = min_intervals(j);
+    mse_values = mse_results{j};
+    psnr_values = psnr_results{j};
+    ssim_values = ssim_results{j};
+    of_values = of_results{j};
+    
+    intervals_column = [intervals_column; repmat(interval, length(mse_values), 1)];
+    mse_column = [mse_column; mse_values(:)];
+    psnr_column = [psnr_column; psnr_values(:)];
+    ssim_column = [ssim_column; ssim_values(:)];
+    of_column = [of_column; of_values(:)];
+end
+T = table(intervals_column, mse_column, psnr_column, ssim_column, of_column, ...
+          'VariableNames', {'Interval', 'MSE', 'PSNR', 'SSIM', 'OF'});
+writetable(T, 'Change Detection results.xlsx');
+
+fprintf('결과 파일 저장완료^^\n');
