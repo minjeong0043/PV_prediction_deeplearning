@@ -2,7 +2,7 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 import os
-
+# 구름강조: 90, 적외선 8.7um: ???
 # img_path = "D:\mj Kim\위성이미지_적외8.7\구름강조(9-11월, 10분단위)\gk2a_ami_le1b_rgb-cs_ko005lc_202408311500.png"
 # image = np.array(Image.open(img_path))
 #
