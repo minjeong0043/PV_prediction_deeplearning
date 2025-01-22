@@ -9,16 +9,8 @@ from selenium.webdriver.support.ui import  WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def file_down(driver):
-    # 조회 및 다운
-    # region_all = driver.find_element(By.XPATH, '//*[@id="ztree_1_check"]').click()
-    # time.sleep(1)
-    # option_all = driver.find_element(By.XPATH, '//*[@id="ztree1_1_check"]').click()
-    # time.sleep(1)
-    driver.find_element(By.XPATH, '//*[@id="dsForm"]/div[3]/button').click()
-    # WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.LINK_TEXT, '속초(90)')))
-    # time.sleep(50)
-    WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
-    # wait = WebDriverWait(driver, 15)  # 최대 10초 대기//*[@id="wrap_content"]/div[4]/div[1]/div/a[2]
+    # driver.find_element(By.XPATH, '//*[@id="dsForm"]/div[3]/button').click()
+    # WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
 
     Excel = driver.find_element(By.XPATH, '//*[@id="wrap_content"]/div[4]/div[1]/div/a[2]')
     driver.execute_script("arguments[0].scrollIntoView();", Excel)
@@ -41,8 +33,8 @@ def file_down(driver):
     # time.sleep(50)
     WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
 
-def file_down_iter(i):
-    download_dir = 'D:\mj Kim\진행중인 업무\종관기상관측(ASOS)\month1'
+def file_down_iter(i, bias, end_day):
+    download_dir = 'D:\mj Kim\진행중인 업무\종관기상관측(ASOS)\month2'
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
     options = webdriver.ChromeOptions()
@@ -75,18 +67,17 @@ def file_down_iter(i):
         time.sleep(1)
         set_year = driver.find_element(By.XPATH, '//*[@id="datepicker_year"]/option[24]').click()
         time.sleep(1)
-        # set_month = driver.find_element(By.XPATH,
-        #                                 '//*[@id="datepicker_month"]/option[1]').click()  # //*[@id="datepicker_month"]/option[12] 12월임
+        set_month = driver.find_element(By.XPATH, '//*[@id="datepicker_month"]/option[2]').click()  # //*[@id="datepicker_month"]/option[12] 12월임
         # time.sleep(2)
-        set_day = driver.find_element(By.XPATH, '//*[@id="ui-datepicker-div"]/table/tbody/tr[1]/td[4]/a').click()
+        set_day = driver.find_element(By.XPATH, '//*[@id="ui-datepicker-div"]/table/tbody/tr[1]/td[7]/a').click()
         time.sleep(1)
         end_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[2]/button/img').click()
         time.sleep(1)
         set_year = driver.find_element(By.XPATH, '//*[@id="datepicker_year"]/option[24]').click()
         time.sleep(1)
-        # set_month = driver.find_element(By.XPATH, '//*[@id="datepicker_month"]/option[1]').click()
-        # time.sleep(2)
-        set_day = driver.find_element(By.XPATH, '//*[@id="ui-datepicker-div"]/table/tbody/tr[1]/td[4]/a').click()
+        set_month = driver.find_element(By.XPATH, '//*[@id="datepicker_month"]/option[2]').click()
+        time.sleep(2)
+        set_day = driver.find_element(By.XPATH, '//*[@id="ui-datepicker-div"]/table/tbody/tr[1]/td[7]/a').click()
         time.sleep(1)
         # option 선택
         driver.find_element(By.XPATH, '//*[@id="ztree_1_check"]').click()
@@ -103,7 +94,7 @@ def file_down_iter(i):
             # driver.find_element(By.XPATH, '//*[@id="ztree1_1_check"]').click()
             # 조회 및 다운
             file_down(driver)
-            print(f"day : {i-3} / 31")
+            print(f"day : {i-bias} / {end_day}")
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
         elif i < 15:
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
@@ -115,7 +106,7 @@ def file_down_iter(i):
             # 조회 및 다운
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
             file_down(driver)
-            print(f"day : {i-3} / 31")
+            print(f"day : {i-bias} / {end_day}")
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
         elif i < 22:
             start_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[1]/button/img').click()
@@ -126,7 +117,7 @@ def file_down_iter(i):
             # 조회 및 다운
             file_down(driver)
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
-            print(f"day : {i-3} / 31")
+            print(f"day : {i-bias} / {end_day}")
         elif i < 29:
             start_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[1]/button/img').click()
             set_day = driver.find_element(By.XPATH,
@@ -139,7 +130,7 @@ def file_down_iter(i):
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
             file_down(driver)
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
-            print(f"day : {i-3} / 31")
+            print(f"day : {i-bias} / {end_day}")
         else:
             start_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[1]/button/img').click()
             set_day = driver.find_element(By.XPATH,
@@ -152,12 +143,12 @@ def file_down_iter(i):
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
             file_down(driver)
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
-            print(f"day : {i-3} / 31")
+            print(f"day : {i-bias} / {end_day}")
     except Exception as e:
         print(f"error: {e}")
 
     finally:
-        time.sleep(10)
+        time.sleep(3)
         driver.quit()
 
 # download_dir = 'D:\mj Kim\진행중인 업무\종관기상관측(ASOS)\month1'
@@ -172,6 +163,7 @@ def file_down_iter(i):
 # }
 # options.add_experimental_option("prefs", prefs)
 # driver = webdriver.Chrome(options= options)
-
-for i in range(1+3, 31+3):
-    file_down_iter(i)
+bias = 6
+end_day = 28
+for i in range(7+bias, end_day+bias):
+    file_down_iter(i, bias, end_day)
