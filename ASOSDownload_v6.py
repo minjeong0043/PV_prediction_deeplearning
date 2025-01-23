@@ -34,7 +34,7 @@ def file_down(driver):
     WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
 
 def file_down_iter(i, month, bias, end_day):
-    download_dir = f'D:\mj Kim\진행중인 업무\종관기상관측(ASOS)\ASOS2022\month{month}'
+    download_dir = f'D:\mj Kim\진행중인 업무\종관기상관측(ASOS)\ASOS2023\month{month}'
     if not os.path.exists(download_dir):
         os.makedirs(download_dir)
     options = webdriver.ChromeOptions()
@@ -65,7 +65,7 @@ def file_down_iter(i, month, bias, end_day):
         time.sleep(1)
         driver.find_element(By.XPATH, '//*[@id="datepicker_year"]').click()
         time.sleep(1)
-        set_year = driver.find_element(By.XPATH, '//*[@id="datepicker_year"]/option[26]').click() #24- 2020/ 25- 2021
+        set_year = driver.find_element(By.XPATH, '//*[@id="datepicker_year"]/option[27]').click() #24- 2020/ 25- 2021
         time.sleep(1)
         set_month = driver.find_element(By.XPATH, f'//*[@id="datepicker_month"]/option[{month}]').click()  # //*[@id="datepicker_month"]/option[12] 12월임
         # time.sleep(2)
@@ -73,7 +73,7 @@ def file_down_iter(i, month, bias, end_day):
         time.sleep(1)
         end_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[2]/button/img').click()
         time.sleep(1)
-        set_year = driver.find_element(By.XPATH, '//*[@id="datepicker_year"]/option[26]').click()
+        set_year = driver.find_element(By.XPATH, '//*[@id="datepicker_year"]/option[27]').click()
         time.sleep(1)
         set_month = driver.find_element(By.XPATH, f'//*[@id="datepicker_month"]/option[{month}]').click()
         time.sleep(2)
@@ -183,12 +183,31 @@ end_day_list_2022 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 month_bias_2023 = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5]
 end_day_list_2023 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-for i in range(1, 13):
+for i in range(2, 13):
     month = i
-    bias = month_bias_2022[i-1]
-    end_day = end_day_list_2022[i-1]
-    print(f"~~~~~~~2021 - {month}~~~~~~~")
-    for k in range(1+bias, end_day+bias+1):
+    bias = month_bias_2023[i-1]
+    end_day = end_day_list_2023[i-1]
+    print(f"~~~~~~~2023 - {month}~~~~~~~")
+    for k in range(13+bias, end_day+bias+1):
         file_down_iter(k, month, bias, end_day+1)
 
 
+
+
+# download Missing data only
+'''
+
+## MissingFiles_2023
+missing_list_202303 = [  2    , 3    , 4  ,   5    , 6  ,   7   ,  8    , 9 ,   10   , 11   , 12   , 13  ,  22   , 24 ,27]
+
+
+month = 3;
+for i in range(month, month+1):
+    bias = month_bias_2023[i-1]
+    end_day = end_day_list_2023[i-1]
+    print(f"~~~~~~~~~~~~~ 2023 - {month} missing Files downloading ~~~~~~~~~~~~~~~~~~~")
+    for k = missing_list_202303:
+        print(f" Missing day : {k}")
+        k = k+bias
+        file_down_iter(k, i, bias, end_day+1)
+        '''
