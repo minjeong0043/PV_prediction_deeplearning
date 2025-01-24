@@ -131,7 +131,7 @@ def file_down_iter(i, month, bias, end_day):
             file_down(driver)
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
             print(f"day : {i-bias} / {end_day-1}")
-        else:
+        elif i <36:
             start_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[1]/button/img').click()
             set_day = driver.find_element(By.XPATH,
                                           f'//*[@id="ui-datepicker-div"]/table/tbody/tr[5]/td[{i - 28}]/a').click()
@@ -143,35 +143,32 @@ def file_down_iter(i, month, bias, end_day):
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
             file_down(driver)
             WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
+            print(f"day : {i - bias} / {end_day - 1}")
+        else:
+            start_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[1]/button/img').click()
+            set_day = driver.find_element(By.XPATH,
+                                          f'//*[@id="ui-datepicker-div"]/table/tbody/tr[6]/td[{i - 35}]/a').click()
+            end_yyyymmdd = driver.find_element(By.XPATH, '//*[@id="dayData"]/dd/div[2]/button/img').click()
+            set_day = driver.find_element(By.XPATH,
+                                          f'//*[@id="ui-datepicker-div"]/table/tbody/tr[6]/td[{i - 35}]/a').click()
+
+            # 조회 및 다운
+            WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
+            file_down(driver)
+            WebDriverWait(driver, 50).until(EC.invisibility_of_element_located((By.ID, "loading-mask")))
             print(f"day : {i-bias} / {end_day-1}")
+
     except Exception as e:
         print(f"error: {e}")
         error_num.append(i)
 
     finally:
-        time.sleep(5)
+        time.sleep(7)
         driver.quit()
 
-# download_dir = 'D:\mj Kim\진행중인 업무\종관기상관측(ASOS)\month1'
-# if not os.path.exists(download_dir):
-#     os.makedirs(download_dir)
-# options = webdriver.ChromeOptions()
-# prefs = {
-#     "download.default_directory": download_dir,
-#     "download.prompt_for_download": False,
-#     "download.directory_upgrade": True,
-#     "safebrowsing.enabled":True
-# }
-# options.add_experimental_option("prefs", prefs)
-# driver = webdriver.Chrome(options= options)
-# bias = 5
-# end_day = 31
-# month = 5
-# # month
-# for i in range(1+bias, end_day+bias+1):
-#     file_down_iter(i,month, bias, end_day+1)
-
-# Year로 돌아가도록 해보기
+#####################################################################################
+# MAIN
+#####################################################################################
 month_bias_2020 = [3, 6, 0, 3, 5, 1, 3, 6, 2, 4, 0, 2]
 end_day_list_2020 = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
@@ -183,12 +180,12 @@ end_day_list_2022 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 month_bias_2023 = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5]
 end_day_list_2023 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-for i in range(2, 13):
+for i in range(1, 13):
     month = i
     bias = month_bias_2023[i-1]
     end_day = end_day_list_2023[i-1]
     print(f"~~~~~~~2023 - {month}~~~~~~~")
-    for k in range(13+bias, end_day+bias+1):
+    for k in range(1+bias, end_day+bias+1):
         file_down_iter(k, month, bias, end_day+1)
 
 
@@ -196,10 +193,8 @@ for i in range(2, 13):
 
 # download Missing data only
 '''
-
 ## MissingFiles_2023
 missing_list_202303 = [  2    , 3    , 4  ,   5    , 6  ,   7   ,  8    , 9 ,   10   , 11   , 12   , 13  ,  22   , 24 ,27]
-
 
 month = 3;
 for i in range(month, month+1):
