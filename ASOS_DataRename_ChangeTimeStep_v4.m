@@ -62,7 +62,7 @@ function oneFile_changeTimestep(file_path)
     '해면기압 QC플래그', '습도(%)', '습도 QC플래그', '일사(MJ/m^2)', '일조(Sec)'};
     new_data_table = cell2table(new_data, 'variableNames', header);
 
-    output_file = fullfile(folder, [file_name, '_TimeStep10', '.xls']);
+    output_file = fullfile(folder, [file_name, '_10min', '.xls']);
     disp(['Output file path: ', output_file]);
     writetable(new_data_table, output_file);
     disp(['TimeStep10 data saved to ', output_file]);
@@ -116,7 +116,7 @@ for y = 1:4
         month = str2num(regexprep(monthFolder(m).name, '[^0-9]', ''));
         disp(['month : ', num2str(month)]);
         month_path = fullfile(year_path, monthFolder(m).name);
-        %file_Rename_inMonth(month_path);
+        % file_Rename_inMonth(month_path);
         month_changeTimestep(month_path);
         
     end
