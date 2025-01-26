@@ -105,11 +105,11 @@ end
 fprintf('Total unique days: %d\n', length(unique_days));
 
 
-%%
+%% 각 Day당 몇 개의 이미지가 있는지
 clc; clear all;
 
 % Folder path
-folder = 'D:\mj Kim\위성이미지_적외8.7\구름강조(9-11월, 10분단위)';
+folder = 'D:\PV_forecast_2025\적외선_8.7(2021년, 10분단위)_crop_v2';
 files = dir(fullfile(folder, '*.png')); % List all PNG files
 file_names = natsortfiles({files.name}); % Natural sorting of filenames
 
@@ -121,9 +121,9 @@ day_counts = [];  % To store counts of data for each day in September
 
 % Loop through all files to extract days and count occurrences for September
 for i = 1:n
-    month = file_names{i}(34:35); % Extract month part (assuming month is at position 34:35)
-    if strcmp(month, '09') % Only process files for September (month == '09')
-        day = file_names{i}(36:37); % Extract day part (assuming day is at position 36:37)
+    month = file_names{i}(33:34); % Extract month part (assuming month is at position 34:35)
+    if strcmp(month, '01') % Only process files for September (month == '09')
+        day = file_names{i}(35:36); % Extract day part (assuming day is at position 36:37)
         
         % Check if the day is already in the unique_days list
         if isempty(unique_days) || ~ismember(day, unique_days)
