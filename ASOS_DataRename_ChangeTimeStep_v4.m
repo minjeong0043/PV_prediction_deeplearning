@@ -62,14 +62,14 @@ function oneFile_changeTimestep(file_path)
     '해면기압 QC플래그', '습도(%)', '습도 QC플래그', '일사(MJ/m^2)', '일조(Sec)'};
     new_data_table = cell2table(new_data, 'variableNames', header);
 
-    output_file = fullfile(folder, [file_name+ '_TimeStep10'+ '.xls'])
-    disp(['Output file path: '+ output_file]);
+    output_file = fullfile(folder, [file_name, '_TimeStep10', '.xls']);
+    disp(['Output file path: ', output_file]);
     writetable(new_data_table, output_file);
-    disp(['TimeStep10 data saved to '+ output_file])
+    disp(['TimeStep10 data saved to ', output_file]);
 
     if exist(file_path, 'file') == 2
         delete(file_path);
-        disp(['Original file deleted '+ file_path]);
+        disp(['Original file deleted ', file_path]);
     else
         disp('Original file not found');
     end
@@ -80,6 +80,7 @@ function month_changeTimestep(month_path)
     files = fullfile(month_path, '*.xls*');
     files = dir(files);
     for i = 1:length(files)
+        file_path = fullfile(month_path, files(i).name);
         oneFile_changeTimestep(file_path)
     end
 end
