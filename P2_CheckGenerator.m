@@ -1,15 +1,23 @@
 clc; clear all; close all;
-load('dlnetGenerator_ir(inputSize128, latentvector256, dongAsia, Epoch50)', 'dlnetGenerator');
+load('dlnetGenerator_ir(inputSize128, latentvector256, dongAsia, Epoch50).mat', 'dlnetGenerator');
+dlnetGenerator_inputSize128 = dlnetGenerator;
+load('dlnetGenerator_ir(inputSize256, latentvector256, dongAsia, Epoch100).mat', 'dlnetGenerator');
+dlnetGenerator_inputSize256 = dlnetGenerator;
+clear dlnetGenerator
 
+% landom Latent vector
 numLatentInputs = 256;
 z = randn(1, 1, numLatentInputs, 144, 'single');
 dlZ = dlarray(z, 'SSCB');
-dlXGenerated = predict(dlnetGenerator, dlZ);
+dlXGenerated = predict(dlnetGenerator_inputSize128, dlZ);
 dlX = extractdata(dlXGenerated);
-size(dlX(:,:,:,1))
+size(dlX(:,:,:,1));
 
-h = figure;
-imshow(dlX(:,:,:,1))
+% 단일 이미지 출력
+% h = figure;
+% imshow(dlX(:,:,:,1))
+
+% 타일 이미지 출력
 h = figure;
 I = imtile(dlX);
 I_rescale = rescale(I);
@@ -21,6 +29,7 @@ title('Generated Images');
 saveas(h, 'CheckingGenerator.png');
 close(h)
 
+% Plot Latent vector space
 z_forPlot = squeeze(z)
 size(z_forPlot(:,1))
 k = figure;
@@ -28,12 +37,6 @@ scatter(1:256, z_forPlot(:,1), "filled")
 xlim([0, 256])
 size(squeeze(z))
 
-p = figure;
-for i = 1:12:12
-    subplot(12, 12, i)
-    scatter(1:256, z_forPlot(:,i), "filled")
-    title([' index : ', string(i)])
-end
 
 p = figure;
 img_index = 1;
@@ -96,3 +99,14 @@ for i = 1:12*12
     scatter(1:256, z_forPlot(:,i), "filled");
     axis off;
 end
+
+
+%% 
+f = figure;
+f.Position = [950, 670, 560, 560];
+tLay = tiledlayout(5, 5, "TileSpacing", "none", "Padding", "none");
+imshow(z_forPlot)
+xticklabels([]);
+yticklabels([]);
+axis tight;
+axis off;
