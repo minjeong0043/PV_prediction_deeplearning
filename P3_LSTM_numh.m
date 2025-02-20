@@ -76,12 +76,12 @@ validationFrequency = 5;
 % numTargetFrame = 24
 
 % Adam param
-beta1 = 0.9;
-beta2 = 0.999;
-epsilon = 1e-8;
-moment1 = [];
-moment2 = [];
-timeStep = 0;
+% beta1 = 0.9;
+% beta2 = 0.999;
+% epsilon = 1e-8;
+% moment1 = [];
+% moment2 = [];
+% timeStep = 0;
 
 iteration = 0;
 figure;
@@ -96,9 +96,9 @@ for epoch = 1:numEpochsLSTM
         if size(data, 1) == numInputFrames + numTargetFrame
             [inputData, targetData] = processSequence(data, numTargetFrame);
             [gradientsModel, loss] = dlfeval(@modelGradients, inputData, targetData, dlnetGenerator, dlnetLSTM);
-            % [dlnetLSTM, squaredGradientsAvg] = rmspropupdate(dlnetLSTM, gradientsModel, squaredGradientsAvg, learnRate);
-            timeStep = timeStep + 1;
-            [dlnetLSTM, moment1, moment2] = adamupdate(dlnetLSTM, gradientsModel, moment1, moment2, timeStep, learnRate, beta1, beta2, epsilon);
+            [dlnetLSTM, squaredGradientsAvg] = rmspropupdate(dlnetLSTM, gradientsModel, squaredGradientsAvg, learnRate);
+            % timeStep = timeStep + 1;
+            % [dlnetLSTM, moment1, moment2] = adamupdate(dlnetLSTM, gradientsModel, moment1, moment2, timeStep, learnRate, beta1, beta2, epsilon);
             
             D = duration(0,0,toc(start), 'Format', 'hh:mm:ss');
                        
