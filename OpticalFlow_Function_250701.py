@@ -124,25 +124,25 @@ def plot_flow_compare(img1, dx1, dy1, title1,
     plt.savefig(savefile, dpi=300)
     plt.show()
 
-    def WindSpeedDir(img1_path, img2_path, img3_path): # input image path
-        img1 = np.array(Image.open(img1_path).convert("L"))
-        img2 = np.array(Image.open(img2_path).convert("L"))
-        img3 = np.array(Image.open(img3_path).convert("L"))
+def WindSpeedDir(img1_path, img2_path, img3_path): # input image path
+    img1 = np.array(Image.open(img1_path).convert("L"))
+    img2 = np.array(Image.open(img2_path).convert("L"))
+    img3 = np.array(Image.open(img3_path).convert("L"))
 
-        dx12, dy12 = OpticalFlow(img1, img2)
-        mag12, angle12 = cv2.cartToPolar(dx12, dy12)
-        wind_speed12 = mag12
-        wind_dir12 = angle12 * 180 / np.pi
+    dx12, dy12 = OpticalFlow(img1, img2)
+    mag12, angle12 = cv2.cartToPolar(dx12, dy12)
+    wind_speed12 = mag12
+    wind_dir12 = angle12 * 180 / np.pi
 
-        dx23, dy23 = OpticalFlow(img2, img3)
-        mag23, angle23 = cv2.cartToPolar(dx23, dy23)
-        wind_speed23 = mag23
-        wind_dir23 = angle23 * 180 / np.pi
+    dx23, dy23 = OpticalFlow(img2, img3)
+    mag23, angle23 = cv2.cartToPolar(dx23, dy23)
+    wind_speed23 = mag23
+    wind_dir23 = angle23 * 180 / np.pi
 
-        wind_speed = (wind_speed12 + wind_speed23) / 2
-        wind_dir = (wind_dir12 + wind_dir23) / 2
+    wind_speed = (wind_speed12 + wind_speed23) / 2
+    wind_dir = (wind_dir12 + wind_dir23) / 2
 
-        return wind_speed, wind_dir
+    return wind_speed, wind_dir
 
 
 
