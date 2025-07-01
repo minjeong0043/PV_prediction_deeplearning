@@ -16,11 +16,29 @@ def OpticalFlow(img1, img2):
     dx = flow[..., 0]
     dy = flow[..., 1]
     # magnitude, angle = cv2.cartToPolar(dx, dy)
-
     # 풍속과 풍향 출력
     # wind_speed = magnitude
     # wind_dir = angle * 180 / np.pi  # 각도 (0~360도)
     return dx, dy
+
+def convertDeltaToKmDeg(dx, dy, x, y): # 이미지에서 좌표(x, y)
+    magnitude, angle = cv2.cartToPolar(dx, dy)
+    # 원하는 좌표만 빼서 계산
+    u = dx[x, y]
+    v = dy[x, y]
+
+    pixel_size_m = 1000
+    dt_sec = 60*10 # 10분 간격
+    u_mps = u * pixel_size_m/dt_sec
+    v_mps = v * pixel_size_m/dt_sec
+
+    wind_speed = np.sqrt(u_mps**2 + v_mps**2)
+    wind_dir = np.arctan2(v_mps, u_mps) * 180/np.pi
+    wind_dir = (wind_dir + 360) % 360
+
+    return wind_speed, wind_dir
+
+
 
 
 def plot_flow(img, dx, dy, title, savefile):
@@ -124,20 +142,16 @@ def plot_flow_compare(img1, dx1, dy1, title1,
     plt.savefig(savefile, dpi=300)
     plt.show()
 
-def WindSpeedDir(img1_path, img2_path, img3_path): # input image path
+def WindSpeedDir(img1_path, img2_path, img3_path, x, y): # input image path
     img1 = np.array(Image.open(img1_path).convert("L"))
     img2 = np.array(Image.open(img2_path).convert("L"))
     img3 = np.array(Image.open(img3_path).convert("L"))
 
     dx12, dy12 = OpticalFlow(img1, img2)
-    mag12, angle12 = cv2.cartToPolar(dx12, dy12)
-    wind_speed12 = mag12
-    wind_dir12 = angle12 * 180 / np.pi
+    wind_speed12, wind_dir12 = convertDeltaToKmDeg(dx12, dy12, x, y)
 
     dx23, dy23 = OpticalFlow(img2, img3)
-    mag23, angle23 = cv2.cartToPolar(dx23, dy23)
-    wind_speed23 = mag23
-    wind_dir23 = angle23 * 180 / np.pi
+    wind_speed23, wind_dir23 = convertDeltaToKmDeg(dx23, dy23, x, y)
 
     wind_speed = (wind_speed12 + wind_speed23) / 2
     wind_dir = (wind_dir12 + wind_dir23) / 2
