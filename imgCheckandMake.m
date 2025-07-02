@@ -1,3 +1,4 @@
+clc; clear all; close all;
 function return_num = imgCheckandMake(return_num,folder)
     return_num = 1;
     files = dir(fullfile(folder, '*.png')); % 폴더 내 PNG 파일 목록 가져오기
@@ -24,9 +25,9 @@ function return_num = imgCheckandMake(return_num,folder)
             % 파일 만들기
             % i = 4
             oldFilePath = fullfile(folder, files{i-1});
-            % oldFilePath에서 10분 더하기
-            index_h = find(hour_index == oldFilePath(79:80));
-            index_m = find(min_index == oldFilePath(81:82));
+            % oldFilePath에서 10분 더하기 (파일명에 따라 index 변경해줘야함)
+            index_h = find(hour_index == oldFilePath(76:77));
+            index_m = find(min_index == oldFilePath(78:79));
             index_m = index_m;
             index_h_new = index_h;
             index_m_new = index_m+1;
@@ -37,9 +38,9 @@ function return_num = imgCheckandMake(return_num,folder)
                     index_h_new = 1;
                 end
             end
-
-            newFilePath = string(oldFilePath(1:78))+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
-            copyfile(oldFilePath, newFilePath);
+            % 파일 이름에따라 index 변경해줘야함.
+            newFilePath = string(oldFilePath(1:67+4+4))+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
+            copyfile(char(oldFilePath), char(newFilePath));
             if exist(newFilePath)
                 fprintf('~~~Making files : %s\n', newFilePath);
                 return_num = 0;
@@ -53,8 +54,8 @@ function return_num = imgCheckandMake(return_num,folder)
                 oldFilePath = fullfile(folder, files{i-1});
                 % oldFilePath에서 10분 더하기
        
-                index_h = find(hour_index == oldFilePath(79:80));
-                index_m = find(min_index == oldFilePath(81:82));
+                index_h = find(hour_index == oldFilePath(76:77));
+                index_m = find(min_index == oldFilePath(78:79));
                 index_m = index_m;
                 index_h_new = index_h;
                 index_m_new = index_m+1;
@@ -66,7 +67,7 @@ function return_num = imgCheckandMake(return_num,folder)
                     end
                 end
 
-                newFilePath = string(oldFilePath(1:78))+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
+                newFilePath = string(oldFilePath(1:67+4+4))+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
                 copyfile(oldFilePath, newFilePath);
                 if exist(newFilePath)
                     fprintf('@@@@@Making files : %s\n', newFilePath);
@@ -89,12 +90,12 @@ end
 
 
 %% main
-folder = 'E:\PV_forecast_2024\적외선_8.7(2021년, 10분단위)';
+folder = '\\Ugrid\sml_nas\연구용데이터\태풍이미지\1.카눈_누락처리';
 return_num = 0
 return_num = imgCheckandMake(return_num, folder);
 
 fprintf('File check completed.\n');
- 
+
 
 %%
 counter = 0;
