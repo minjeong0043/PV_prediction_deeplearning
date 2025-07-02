@@ -24,10 +24,10 @@ function return_num = imgCheckandMake(return_num,folder)
             fprintf('HOUR) Missing file before: %s\n', files{i}); 
             % 파일 만들기
             % i = 4
-            oldFilePath = fullfile(folder, files{i-1});
+            oldFileName = files{i-1};
             % oldFilePath에서 10분 더하기 (파일명에 따라 index 변경해줘야함)
-            index_h = find(hour_index == oldFilePath(76:77));
-            index_m = find(min_index == oldFilePath(78:79));
+            index_h = find(hour_index == oldFileName(37:38));
+            index_m = find(min_index == oldFileName(39:40));
             index_m = index_m;
             index_h_new = index_h;
             index_m_new = index_m+1;
@@ -39,8 +39,9 @@ function return_num = imgCheckandMake(return_num,folder)
                 end
             end
             % 파일 이름에따라 index 변경해줘야함.
-            newFilePath = string(oldFilePath(1:67+4+4))+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
-            copyfile(char(oldFilePath), char(newFilePath));
+            FilePath = [folder, oldFileName(1:36)]
+            newFilePath = string(FilePath)+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
+            copyfile(fullfile(folder, oldFileName), newFilePath);
             if exist(newFilePath)
                 fprintf('~~~Making files : %s\n', newFilePath);
                 return_num = 0;
@@ -51,11 +52,10 @@ function return_num = imgCheckandMake(return_num,folder)
                 fprintf('MIN) Missing file before: %s\n', files{i});
                 % 파일 만들기
                 % i = 4
-                oldFilePath = fullfile(folder, files{i-1});
+                oldFileName = files{i-1};
                 % oldFilePath에서 10분 더하기
-       
-                index_h = find(hour_index == oldFilePath(76:77));
-                index_m = find(min_index == oldFilePath(78:79));
+                index_h = find(hour_index == oldFileName(37:38));
+                index_m = find(min_index == oldFileName(39:40));
                 index_m = index_m;
                 index_h_new = index_h;
                 index_m_new = index_m+1;
@@ -67,8 +67,9 @@ function return_num = imgCheckandMake(return_num,folder)
                     end
                 end
 
-                newFilePath = string(oldFilePath(1:67+4+4))+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
-                copyfile(oldFilePath, newFilePath);
+                FilePath = [folder, oldFileName(1:36)]
+                newFilePath = string(FilePath)+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
+                copyfile(fullfile(folder, oldFileName), newFilePath);
                 if exist(newFilePath)
                     fprintf('@@@@@Making files : %s\n', newFilePath);
                     return_num = 0;
@@ -90,7 +91,7 @@ end
 
 
 %% main
-folder = '\\Ugrid\sml_nas\연구용데이터\태풍이미지\1.카눈_누락처리';
+folder = '\\Ugrid\sml_nas\연구용데이터\태풍이미지\13.장미_(전처리, 누락데이터)\';
 return_num = 0
 return_num = imgCheckandMake(return_num, folder);
 
@@ -99,10 +100,14 @@ fprintf('File check completed.\n');
 
 %%
 counter = 0;
-while counter < 300
+list = dir(fullfile(folder, '*.png'))
+n = size(list)
+while counter < n(1)
     return_num = imgCheckandMake(return_num, folder);
     fprintf("File check completed.\n")
     % pause(2);
     counter = counter + 1;
     fprintf("counter : %d\n", counter);
 end
+
+fprintf("Finished Checking")
