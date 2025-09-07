@@ -1,66 +1,113 @@
 clc; clear all; close all;
+%% main
+folder = 'C:\Users\Minjeong\Desktop\태풍이미지(2024-2025)\15. 페이파_crop';
+return_num = 0;
+return_num = imgCheckandMake(return_num, folder);
 
-folder = 'C:\Users\minjeong\Desktop\천리안2호_적외(구름상)_2020~2022_1hour_crop';
-files = dir(fullfile(folder, '*.png'));
-files = natsortfiles({files.name});
-n = length(files)
-%% 만든 이미지 지우기
-n = length(files);
-for i = 1:n
-    if length(files{i}) ~= 44
-        delete(fullfile(folder, files{i}))
-        fprintf('delete file : %s\n', files{i});
-    end
-end
-fprintf("total files  %d\n", n)
+fprintf('File check completed.\n');
 
-%% 이미지 누락 파일 확인
-clc; clear all; close all;
 
-folder = 'C:\Users\minjeong\Desktop\천리안2호_적외(구름상)_2020~2022_1hour_crop';
-files = dir(fullfile(folder, '*.png'));
-files = natsortfiles({files.name});
-n = length(files)
-
-hour_index = ["15", "16", "17", "18", "19", "20", "21", "22", "23", ...
-              "00", "01", "02", "03", "04", "05", "06", "07", "08", ...
-              "09", "10", "11", "12", "13", "14"];
-hour_bias = find(hour_index == '06')
-index_h = hour_bias;
-
-for i = 1:n
-    hour = string(files{i}(37:38));
-    expected_hour = hour_index(index_h);
-    fprintf("current file : %s, expected hour : %s\n", files{i}, expected_hour);
-    if hour ~= expected_hour
-        fprintf('Missing File before: %s\n', files{i});
-        index_h = index_h + 1;
-        if index_h> length(hour_index)
-            index_h = 1;
-        end
-
-        % 대체 파일 생성
-        oldFilePath = fullfile(folder, files{i-1});
-        file_hIndex = find(hour_index == oldFilePath(98:99));
-        file_hIndex_new = file_hIndex+1;
-        if file_hIndex_new > length(hour_index)
-            file_hIndex_new = 1;
-        end
-        newFilesPath = string(oldFilePath(1:97)) + hour_index(file_hIndex_new) + "00_" + hour_index(file_hIndex) + "00"+".png";
-        copyfile(oldFilePath, newFilesPath);
-        if exist(newFilesPath)
-            fprintf('~~~~~~~Making file : %s\n', newFilesPath);
-        end
-        pause(1)
-        % break
-        % index_h = index_h + 1;
-    end
-
-    index_h = index_h + 1;
-    if index_h > length(hour_index)
-        index_h = 1;
-    end
+%%
+counter = 0;
+list = dir(fullfile(folder, '*.png'))
+n = size(list)
+while counter < n(1)
+    return_num = imgCheckandMake(return_num, folder);
+    fprintf("File check completed.\n")
+    % pause(2);
+    counter = counter + 1;
+    fprintf("counter : %d\n", counter);
 end
 
-fprintf('Complete checking\n')
+fprintf("Finished Checking")
 
+%% Define function
+function return_num = imgCheckandMake(return_num,folder)
+    return_num = 1;
+    files = dir(fullfile(folder, '*.png')); % 폴더 내 PNG 파일 목록 가져오기
+    files = natsortfiles({files.name}); % 자연 정렬
+
+    % 시간 및 분 단위 배열 정의
+    hour_index = ["15", "16", "17", "18", "19", "20", "21", "22", "23", ...
+                  "00", "01", "02", "03", "04", "05", "06", "07", "08", ...
+                  "09", "10", "11", "12", "13", "14"];
+    min_index = ["00", "10", "20", "30", "40", "50"]; 
+    n = length(files); 
+    index_h = 0; index_m = 0; index_m_new = 0; index_h_new = 0;
+
+    h = 1; 
+    j=0;
+    for i = 1:n
+        hour = string(files{i}(37:38)); 
+        min = string(files{i}(39:40)); 
+
+        expected_min = min_index(mod(i-1, 6)+1);
+
+        if hour ~= hour_index(h)
+            fprintf('HOUR) Missing file before: %s\n', files{i}); 
+            % 파일 만들기
+            % i = 4
+            oldFileName = files{i-1};
+            % oldFilePath에서 10분 더하기 (파일명에 따라 index 변경해줘야함)
+            index_h = find(hour_index == oldFileName(37:38));
+            index_m = find(min_index == oldFileName(39:40));
+            index_m = index_m;
+            index_h_new = index_h;
+            index_m_new = index_m+1;
+            if index_m_new > length(min_index)
+                index_m_new = 1;
+                index_h_new = index_h + 1;
+                if index_h_new > length(hour_index)
+                    index_h_new = 1;
+                end
+            end
+            % 파일 이름에따라 index 변경해줘야함.
+            FilePath = fullfile(folder, oldFileName(1:36))
+            newFilePath = string(FilePath)+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
+            copyfile(fullfile(folder, oldFileName), newFilePath);
+            if exist(newFilePath)
+                fprintf('~~~Making files : %s\n', newFilePath);
+                return_num = 0;
+            end
+            break; 
+        else
+            if expected_min ~= min
+                fprintf('MIN) Missing file before: %s\n', files{i});
+                % 파일 만들기
+                % i = 4
+                oldFileName = files{i-1};
+                % oldFilePath에서 10분 더하기
+                index_h = find(hour_index == oldFileName(37:38));
+                index_m = find(min_index == oldFileName(39:40));
+                index_m = index_m;
+                index_h_new = index_h;
+                index_m_new = index_m+1;
+                if index_m_new > length(min_index)
+                    index_m_new = 1;
+                    index_h_new = index_h + 1;
+                    if index_h_new > length(hour_index)
+                        index_h_new = 1;
+                    end
+                end
+
+                FilePath = fullfile(folder, oldFileName(1:36))
+                newFilePath = string(FilePath)+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
+                copyfile(fullfile(folder, oldFileName), newFilePath);
+                if exist(newFilePath)
+                    fprintf('@@@@@Making files : %s\n', newFilePath);
+                    return_num = 0;
+                end
+                j = j+3;
+                % h = h-1;
+                break;
+            end
+        end
+
+        if expected_min == "50"
+            h = h + 1;
+            if h > length(hour_index) 
+                h = 1;
+            end
+        end
+    end
+end
