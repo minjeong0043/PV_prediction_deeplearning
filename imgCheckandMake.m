@@ -1,4 +1,27 @@
 clc; clear all; close all;
+%% main
+folder = 'C:\Users\Minjeong\Desktop\태풍이미지(2024-2025)\15. 페이파_crop';
+return_num = 0;
+return_num = imgCheckandMake(return_num, folder);
+
+fprintf('File check completed.\n');
+
+
+%%
+counter = 0;
+list = dir(fullfile(folder, '*.png'))
+n = size(list)
+while counter < n(1)
+    return_num = imgCheckandMake(return_num, folder);
+    fprintf("File check completed.\n")
+    % pause(2);
+    counter = counter + 1;
+    fprintf("counter : %d\n", counter);
+end
+
+fprintf("Finished Checking")
+
+%% Define function
 function return_num = imgCheckandMake(return_num,folder)
     return_num = 1;
     files = dir(fullfile(folder, '*.png')); % 폴더 내 PNG 파일 목록 가져오기
@@ -39,7 +62,7 @@ function return_num = imgCheckandMake(return_num,folder)
                 end
             end
             % 파일 이름에따라 index 변경해줘야함.
-            FilePath = [folder, oldFileName(1:36)]
+            FilePath = fullfile(folder, oldFileName(1:36))
             newFilePath = string(FilePath)+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
             copyfile(fullfile(folder, oldFileName), newFilePath);
             if exist(newFilePath)
@@ -67,7 +90,7 @@ function return_num = imgCheckandMake(return_num,folder)
                     end
                 end
 
-                FilePath = [folder, oldFileName(1:36)]
+                FilePath = fullfile(folder, oldFileName(1:36))
                 newFilePath = string(FilePath)+hour_index(index_h_new)+min_index(index_m_new)+'_' + hour_index(index_h)+min_index(index_m)+'.png';
                 copyfile(fullfile(folder, oldFileName), newFilePath);
                 if exist(newFilePath)
@@ -88,26 +111,3 @@ function return_num = imgCheckandMake(return_num,folder)
         end
     end
 end
-
-
-%% main
-folder = '\\Ugrid\sml_nas\연구용데이터\태풍이미지\13.장미_(전처리, 누락데이터)\';
-return_num = 0
-return_num = imgCheckandMake(return_num, folder);
-
-fprintf('File check completed.\n');
-
-
-%%
-counter = 0;
-list = dir(fullfile(folder, '*.png'))
-n = size(list)
-while counter < n(1)
-    return_num = imgCheckandMake(return_num, folder);
-    fprintf("File check completed.\n")
-    % pause(2);
-    counter = counter + 1;
-    fprintf("counter : %d\n", counter);
-end
-
-fprintf("Finished Checking")
