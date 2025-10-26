@@ -66,11 +66,10 @@ def send_error_email(error_message):
     except Exception as e:
         print('이메일 전송 실패 :', e)
 
-timer = threading.Timer(30, timeout_handler)
-
+threadingTime = 40
 try:
     # Set download path
-    download_path = r"D:\SatelliteImageDownload(10.5color)\2020_10"
+    download_path = r"D:\SatelliteImageDownload(10.5color)\2021_7"
     options = webdriver.ChromeOptions()
     prefs = {'download.default_directory': download_path,
              'download.prompt_for_download': False,
@@ -96,8 +95,8 @@ try:
     timeSleep_after_timeButton = 0.3
     timeSleep_after_selectTime = 1.4
     timeSleep_after_saveData = 0.1
-    timeSleep_after_allSaveDataPerDay = 1.5
-
+    timeSleep_after_allSaveDataPerDay = 0.2
+    threadingTime = 10
     try:
         # input("Press enter when you set information!! (자료 종류, 영역 .etc)")
         # 자료 종류 10.5um로 설정
@@ -112,18 +111,17 @@ try:
         # 9월달 나올 때까지 이전달 버튼 누르기
         while True:
             current_month_year = driver.find_element(By.CLASS_NAME, 'ui-datepicker-title').text
-            if "2020년 10월" in current_month_year:
+            if "2021년 7월" in current_month_year:
                 break
             driver.find_element(By.CLASS_NAME, prev_month_button_xpath).click()
             time.sleep(0.16)
             print('press prev month')
-        print("Reached September 2020.10")
-        timer.start()
+        print("Reached September 2021.7")
 
         # Day 버튼
         # for i in range(30,31):
         Blacknum = 4
-        startnum = 5
+        startnum = 10
 
         print(f'Start Day : {startnum}')
         # searchTime select 박스 내 모든 option 요소를 찾기
@@ -144,11 +142,14 @@ try:
                     print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                     for j in range(0, option_count):
+                        timer = threading.Timer(threadingTime, timeout_handler)
+                        timer.start()
                         specific_time_button = driver.find_element(By.XPATH,
                                                                    f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                         time.sleep(timeSleep_after_selectTime)
                         saveData(driver)
                         time.sleep(timeSleep_after_saveData)
+                        timer.cancel()
                     time.sleep(timeSleep_after_allSaveDataPerDay)
                 else:
                     driver.find_element(By.XPATH, YYYYMMDD_xpath).click()
@@ -160,11 +161,14 @@ try:
                     print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                     for j in range(0, option_count):
+                        timer = threading.Timer(threadingTime, timeout_handler)
+                        timer.start()
                         specific_time_button = driver.find_element(By.XPATH,
                                                                    f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                         time.sleep(timeSleep_after_selectTime)
                         saveData(driver)
                         time.sleep(timeSleep_after_saveData)
+                        timer.cancel()
                     time.sleep(timeSleep_after_allSaveDataPerDay)
             elif i < 15:
                 if i == 14:
@@ -176,10 +180,13 @@ try:
                     print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                     for j in range(0,option_count):
+                        timer = threading.Timer(threadingTime, timeout_handler)
+                        timer.start()
                         specific_time_button = driver.find_element(By.XPATH,f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                         time.sleep(timeSleep_after_selectTime)
                         saveData(driver)
                         time.sleep(timeSleep_after_saveData)
+                        timer.cancel()
                     time.sleep(timeSleep_after_allSaveDataPerDay)
                 else:
                     driver.find_element(By.XPATH, YYYYMMDD_xpath).click()
@@ -191,11 +198,14 @@ try:
                     print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                     for j in range(0, option_count):
+                        timer = threading.Timer(threadingTime, timeout_handler)
+                        timer.start()
                         specific_time_button = driver.find_element(By.XPATH,
                                                                    f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                         time.sleep(1.4)
                         saveData(driver)
                         time.sleep(timeSleep_after_saveData)
+                        timer.cancel()
                     time.sleep(timeSleep_after_allSaveDataPerDay)
             elif i < 22:
                 driver.find_element(By.XPATH, YYYYMMDD_xpath).click()
@@ -207,11 +217,14 @@ try:
                 print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                 for j in range(0, option_count):
+                    timer = threading.Timer(threadingTime, timeout_handler)
+                    timer.start()
                     specific_time_button = driver.find_element(By.XPATH,
                                                                f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                     time.sleep(timeSleep_after_selectTime)
                     saveData(driver)
                     time.sleep(timeSleep_after_saveData)
+                    timer.cancel()
                 time.sleep(timeSleep_after_allSaveDataPerDay)
             elif i < 29:
                 driver.find_element(By.XPATH, YYYYMMDD_xpath).click()
@@ -224,11 +237,14 @@ try:
                 print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                 for j in range(0, option_count):
+                    timer = threading.Timer(threadingTime, timeout_handler)
+                    timer.start()
                     specific_time_button = driver.find_element(By.XPATH,
                                                                f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                     time.sleep(timeSleep_after_selectTime)
                     saveData(driver)
                     time.sleep(timeSleep_after_saveData)
+                    timer.cancel()
                 time.sleep(timeSleep_after_allSaveDataPerDay)
             elif i < 36:
                 driver.find_element(By.XPATH, YYYYMMDD_xpath).click()
@@ -240,13 +256,15 @@ try:
                 print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                 for j in range(0, option_count):
+                    timer = threading.Timer(threadingTime, timeout_handler)
+                    timer.start()
                     specific_time_button = driver.find_element(By.XPATH,
                                                                f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                     time.sleep(timeSleep_after_selectTime)
                     saveData(driver)
                     time.sleep(timeSleep_after_saveData)
+                    timer.cancel()
                 time.sleep(timeSleep_after_allSaveDataPerDay)
-
             else:
                 driver.find_element(By.XPATH, YYYYMMDD_xpath).click()
                 DD_button = driver.find_element(By.XPATH,f'//*[@id="ui-datepicker-div"]/table/tbody/tr[6]/td[{i - 35}]/a').click()
@@ -257,13 +275,15 @@ try:
                 print(f"option의 총 개수 (마지막 인덱스): {option_count}")
 
                 for j in range(0, option_count):
+                    timer = threading.Timer(threadingTime, timeout_handler)
+                    timer.start()
                     specific_time_button = driver.find_element(By.XPATH,
                                                                f'//*[@id="searchTime"]/option[{option_count - j}]').click()
                     time.sleep(timeSleep_after_selectTime)
                     saveData(driver)
                     time.sleep(timeSleep_after_saveData)
+                    timer.cancel()
                 time.sleep(timeSleep_after_allSaveDataPerDay)
-
         time.sleep(1)
         print("Finish downloading")
         send_finishing_email('Downloading Finished')
@@ -271,7 +291,6 @@ try:
         print(f"An error occurred: {e}")
         send_error_email(str(e))
         timer.cancel()
-
 
     input("Enter")
     driver.quit()
