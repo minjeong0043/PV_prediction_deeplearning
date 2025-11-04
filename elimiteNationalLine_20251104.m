@@ -6,7 +6,7 @@ saveFolder = 'D:\천리안2호_적외8.7(2021-2022, 10분단위)_crop';
 imageFiles = dir(fullfile(folder, '*.png'));
 imageFiles = {imageFiles.name}';
 start = tic;
-for i = 1: length(imageFiles)/3*2
+parfor i = 1: length(imageFiles)/3*2
     img_path = fullfile(folder, imageFiles{i});
     save_path = fullfile(saveFolder, imageFiles{i});
     EliminateNationalLine(img_path, save_path);
@@ -28,7 +28,7 @@ yellow_mask = img(:,:,1) >= 121 & img(:,:,2) >= 121 & img(:,:,3) <= 120;
 % 국경선 부분만 검은색(0,0,0)으로 변경
 img(repmat(yellow_mask, [1, 1, 3])) = 0;
 
-repeatCount = 15;
+repeatCount = 2;
 filterSize = 5;
 halfSize = floor(filterSize/2);
 
