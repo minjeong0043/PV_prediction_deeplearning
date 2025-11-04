@@ -1,18 +1,21 @@
 clc; clear all;
 
-folder = "C:\Users\minjeong\Desktop\Mj's paper\CEE_2025.09.26\simulation\5. 위성이미지 국경선 제거";
+folder = "K:\적외선_8.7(2021~2023년, 10분단위)_crop";
+saveFolder = 'D:\천리안2호_적외8.7(2021-2022, 10분단위)_crop';
 % List all image files in the specified folder
 imageFiles = dir(fullfile(folder, '*.png'));
-imageFiles = {imageFiles.name};
-
-for i = 1: length(imageFiles)
+imageFiles = {imageFiles.name}';
+start = tic;
+for i = 1: length(imageFiles)/3*2
     img_path = fullfile(folder, imageFiles{i});
-    EliminateNationalLine(img_path);
-    fprintf('(%d / %d) image name : %s\n', i, length(imageFiles), imageFiles{i})
+    save_path = fullfile(saveFolder, imageFiles{i});
+    EliminateNationalLine(img_path, save_path);
+    D = duration(0,0,toc(start),'Format','hh:mm:ss');
+    fprintf('(%d / %d) image name : %s, Elapsed : %s\n', i, length(imageFiles)/3*2, imageFiles{i}, string(D))
 end
 
 %% one file
-function EliminateNationalLine(img_path)
+function EliminateNationalLine(img_path, save_path)
 orig_img = imread(img_path);   % 원본 이미지
 img = double(orig_img);        % 작업용 이미지
 
@@ -63,6 +66,6 @@ for rep = 1:repeatCount
 end
 
 img = uint8(img);
-imwrite(img, img_path)
+imwrite(img, save_path)
 
 end
